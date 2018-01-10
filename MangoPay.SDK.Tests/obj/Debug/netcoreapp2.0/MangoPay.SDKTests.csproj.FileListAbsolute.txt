@@ -1,0 +1,16 @@
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\NUnit3.TestAdapter.dll
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\nunit.engine.netstandard.dll
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\Mono.Cecil.dll
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\MangoPay.SDKTests.deps.json
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\MangoPay.SDKTests.runtimeconfig.json
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\MangoPay.SDKTests.runtimeconfig.dev.json
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\MangoPay.SDKTests.dll
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\MangoPay.SDKTests.pdb
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\MangoPay.SDK.dll
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\bin\Debug\netcoreapp2.0\MangoPay.SDK.pdb
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\obj\Debug\netcoreapp2.0\MangoPay.SDKTests.csprojResolveAssemblyReference.cache
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\obj\Debug\netcoreapp2.0\MangoPay.SDKTests.csproj.CoreCompileInputs.cache
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\obj\Debug\netcoreapp2.0\MangoPay.SDKTests.AssemblyInfoInputs.cache
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\obj\Debug\netcoreapp2.0\MangoPay.SDKTests.AssemblyInfo.cs
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\obj\Debug\netcoreapp2.0\MangoPay.SDKTests.dll
+D:\Docs\Docs_Agathe_Nico\projet_MOJA\Dev\Tests_Projects\MangoPay.SDK\MangoPay.SDK.Tests\obj\Debug\netcoreapp2.0\MangoPay.SDKTests.pdb

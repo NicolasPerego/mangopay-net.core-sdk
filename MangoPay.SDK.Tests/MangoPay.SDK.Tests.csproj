@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <PackageId />
+    <Version>0</Version>
+    <Authors />
+    <Company />
+    <Product />
+    <AssemblyName>MangoPay.SDK.Tests</AssemblyName>
+    <RootNamespace>MangoPay.SDK.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TestKycPageFile.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestKycPageFile.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Common.Logging" Version="3.4.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MangoPay.SDK\MangoPay.SDK.csproj" />
+  </ItemGroup>
+
+</Project>
