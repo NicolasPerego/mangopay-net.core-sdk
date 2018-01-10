@@ -1,0 +1,1 @@
+# mangopay-net.core-sdk
