@@ -560,7 +560,7 @@ namespace MangoPay.SDK.Core
                 { Constants.CONTENT_TYPE, Constants.APPLICATION_JSON },
 
                 // User agent header
-                { Constants.USER_AGENT, String.Format("MangoPay V2 .NET/{0}", _root.GetVersion()) }
+                { Constants.USER_AGENT, String.Format("MangoPay V2 .NET Core/{0}", _root.GetVersion()) }
             };
 
             // AuthenticationHelper http header
