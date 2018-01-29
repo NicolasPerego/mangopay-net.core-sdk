@@ -380,10 +380,7 @@ namespace MangoPay.SDK.Core
                 }
             }
 
-            //IRestResponse<U> restResponse = client.Execute<U>(restRequest);
-            TaskCompletionSource<IRestResponse<U>> taskCompletion = new TaskCompletionSource<IRestResponse<U>>();
-            RestRequestAsyncHandle handle = client.ExecuteAsync<U>(restRequest, r => taskCompletion.SetResult(r));
-            IRestResponse<U> restResponse = await taskCompletion.Task;
+            IRestResponse<U> restResponse = await client.ExecuteTaskAsync<U>(restRequest);
             responseObject = restResponse.Data;
 
             this._responseCode = (int)restResponse.StatusCode;
