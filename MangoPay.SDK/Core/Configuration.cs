@@ -23,6 +23,9 @@ namespace MangoPay.SDK.Core
 		/// <summary>API version (added in dashboard's SDK only in order to handle both old and new address fields).</summary>
 		public string ApiVersion = "v2.01";
 
+        /// <summary>Setting to allow or not the logging of the bytes content of a KYC file present in a request.</summary>
+        public bool LogKycFileContent = true;
+
         /// <summary>Logger adapter implementation (default: NoOpLoggerFactoryAdapter).</summary>
         public ILoggerFactoryAdapter LoggerFactoryAdapter
         {

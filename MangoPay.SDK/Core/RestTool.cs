@@ -361,7 +361,18 @@ namespace MangoPay.SDK.Core
 
                 if (body != null)
                 {
-                    _log.Debug("CurrentBody: " + body.Value);
+                    bool isKycFileUpload = !this._root.Config.LogKycFileContent && entity != null
+                        && entity.GetType() == typeof(Entities.POST.KycPagePostDTO);
+
+                    if (!isKycFileUpload)
+                    {
+                        _log.Debug("CurrentBody: " + body.Value);
+                    }
+                    else
+                    {
+                        _log.Debug("CurrentBody: " + $"{{\"File\":\"-- bytes file content skipped --\", \"Tag\":" +
+                            $"{body.Value.ToString().Substring(body.Value.ToString().IndexOf("Tag\":") + 5)}");
+                    }
                 }
                 else
                 {
