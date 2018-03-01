@@ -30,7 +30,7 @@ Startup.cs =>
 			
 Then you can inject it in a controller like this :
 
-		public class PaymentController : MojaProjectControllerBase
+		public class PaymentController : Controller
 		{
 			private readonly IMangoPayApi _mangoPayApi;
 
