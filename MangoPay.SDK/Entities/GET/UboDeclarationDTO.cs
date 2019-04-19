@@ -1,4 +1,7 @@
-﻿using MangoPay.SDK.Core.Enumerations;
+﻿using System;
+using MangoPay.SDK.Core;
+using MangoPay.SDK.Core.Enumerations;
+using Newtonsoft.Json;
 
 namespace MangoPay.SDK.Entities.GET
 {
@@ -8,16 +11,16 @@ namespace MangoPay.SDK.Entities.GET
 		{
 		}
 
-		public string ID { get; set; }
-
-		public string UserId { get; set; }
+		/// <summary>Date of creation.</summary>
+		[JsonConverter(typeof(UnixDateTimeConverter))]
+		public DateTime? ProcessedDate { get; set; }
 
 		public UboDeclarationType Status { get; set; }
 
-		public UboRefusedReasonType[] RefusedReasonTypes { get; set; }
+		public UboRefusedReasonType?[] Reason { get; set; }
 
-		public string RefusedReasonMessage { get; set; }
+		public string Message { get; set; }
 
-		public UserValidationStatusDTO[] DeclaredUBOs { get; set; }
+		public UboDTO[] Ubos { get; set; }
 	}
 }

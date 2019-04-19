@@ -14,25 +14,25 @@ namespace MangoPay.SDK.Entities.PUT
 		public String PrimaryButtonColour;
 
 		/// <summary>
-		/// A list of email addresses 
+		/// A list of email addresses
 		/// to use when contacting you for technical issues/communications.
 		/// </summary>
 		public List<String> TechEmails { get; set; }
 
 		/// <summary>
-		/// A list of email addresses to use when contacting you 
+		/// A list of email addresses to use when contacting you
 		/// for admin/commercial issues/communications
 		/// </summary>
 		public List<String> AdminEmails { get; set; }
 
 		/// <summary>
-		/// A list of email addresses to use when contacting you 
+		/// A list of email addresses to use when contacting you
 		/// for fraud/compliance issues/communications
 		/// </summary>
 		public List<String> FraudEmails { get; set; }
 
 		/// <summary>
-		/// A list of email addresses to use when contacting you 
+		/// A list of email addresses to use when contacting you
 		/// for billing issues/communications
 		/// </summary>
 		public List<String> BillingEmails { get; set; }
@@ -48,6 +48,9 @@ namespace MangoPay.SDK.Entities.PUT
 
 		/// <summary>The address of the company’s headquarters</summary>
 		public Address HeadquartersAddress { get; set; }
+
+		///<summary>The phone number of the company's headquarters</summary>
+		public String HeadquartersPhoneNumber { get; set; }
 
 		/// <summary>The tax (or VAT) number for your company</summary>
 		public String TaxNumber { get; set; }

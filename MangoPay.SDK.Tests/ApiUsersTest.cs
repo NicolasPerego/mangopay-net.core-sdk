@@ -259,21 +259,21 @@ namespace MangoPay.SDK.Tests
             {
                 UserLegalDTO matrix = await this.GetMatrix();
 
-                UserLegalPutDTO matrixPut = new UserLegalPutDTO
-                {
-                    Tag = matrix.Tag,
-                    Email = matrix.Email,
-                    Name = matrix.Name,
-                    LegalPersonType = matrix.LegalPersonType,
-                    HeadquartersAddress = matrix.HeadquartersAddress,
-                    LegalRepresentativeFirstName = matrix.LegalRepresentativeFirstName,
-                    LegalRepresentativeLastName = matrix.LegalRepresentativeLastName + " - CHANGED",
-                    LegalRepresentativeAddress = matrix.LegalRepresentativeAddress,
-                    LegalRepresentativeEmail = matrix.LegalRepresentativeEmail,
-                    LegalRepresentativeBirthday = matrix.LegalRepresentativeBirthday,
-                    LegalRepresentativeNationality = matrix.LegalRepresentativeNationality,
-                    LegalRepresentativeCountryOfResidence = matrix.LegalRepresentativeCountryOfResidence
-                };
+				UserLegalPutDTO matrixPut = new UserLegalPutDTO
+				{
+					Tag = matrix.Tag,
+					Email = matrix.Email,
+					Name = matrix.Name,
+					LegalPersonType = matrix.LegalPersonType,
+					HeadquartersAddress = matrix.HeadquartersAddress,
+					LegalRepresentativeFirstName = matrix.LegalRepresentativeFirstName,
+					LegalRepresentativeLastName = matrix.LegalRepresentativeLastName + " - CHANGED",
+					LegalRepresentativeAddress = matrix.LegalRepresentativeAddress,
+					LegalRepresentativeEmail = matrix.LegalRepresentativeEmail,
+					LegalRepresentativeBirthday = matrix.LegalRepresentativeBirthday,
+					LegalRepresentativeNationality = matrix.LegalRepresentativeNationality,
+					LegalRepresentativeCountryOfResidence = matrix.LegalRepresentativeCountryOfResidence
+				};
 
                 UserLegalDTO userSaved = await this.Api.Users.UpdateLegal(matrixPut, matrix.Id);
                 UserLegalDTO userFetched = await this.Api.Users.GetLegal(userSaved.Id);
@@ -504,7 +504,7 @@ namespace MangoPay.SDK.Tests
         }
 
 		[Test]
-		public async Task Test_Users_UpdateBankAccount() 
+		public async Task Test_Users_UpdateBankAccount()
 		{
 			try
 			{
@@ -563,7 +563,7 @@ namespace MangoPay.SDK.Tests
 
                 await this.Api.Users.CreateKycPage(john.Id, kycDocument.Id, fi.FullName);
 
-                KycDocumentPutDTO kycDocumentPut = new KycDocumentPutDTO 
+                KycDocumentPutDTO kycDocumentPut = new KycDocumentPutDTO
                 {
                     Status = KycStatus.VALIDATION_ASKED
                 };
@@ -623,7 +623,7 @@ namespace MangoPay.SDK.Tests
 
         [Test]
         public async Task Test_Users_CreateKycPageFromBytes()
-        {            
+        {
             try
             {
                 UserNaturalDTO john = await this.GetJohn();

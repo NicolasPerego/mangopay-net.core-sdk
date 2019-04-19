@@ -59,7 +59,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterPreAuthorizations();
 
-			return await GetList<CardPreAuthorizationDTO>(MethodKey.UsersPreauthorizations, pagination, userId, sort, filters.GetValues());
+			return await GetList<CardPreAuthorizationDTO>(MethodKey.UsersPreauthorizations, pagination, sort, filters.GetValues(), userId);
 		}
 
 		/// <summary>Lists PreAuthorizations for a card</summary>
@@ -72,7 +72,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterPreAuthorizations();
 
-			return await GetList<CardPreAuthorizationDTO>(MethodKey.CardPreauthorizations, pagination, cardId, sort, filters.GetValues());
+			return await GetList<CardPreAuthorizationDTO>(MethodKey.CardPreauthorizations, pagination, sort, filters.GetValues(), cardId);
 		}
 	}
 }

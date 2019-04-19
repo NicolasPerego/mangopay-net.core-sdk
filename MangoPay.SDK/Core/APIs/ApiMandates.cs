@@ -47,7 +47,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterMandates();
 
-			return await this.GetList<MandateDTO>(MethodKey.MandatesGetAll, pagination, null, sort, filters.GetValues());
+			return await this.GetList<MandateDTO>(MethodKey.MandatesGetAll, pagination, sort, filters.GetValues());
 		}
 
 		/// <summary>Gets all mandates.</summary>
@@ -67,7 +67,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterMandates();
 
-			return await this.GetList<MandateDTO>(MethodKey.MandatesGetForUser, pagination, userId, sort, filters.GetValues());
+			return await this.GetList<MandateDTO>(MethodKey.MandatesGetForUser, pagination, sort, filters.GetValues(), userId);
 		}
 
 		/// <summary>Gets mandates for bank account.</summary>
@@ -81,7 +81,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterMandates();
 
-			return await this.GetList<MandateDTO>(MethodKey.MandatesGetForBankAccount, pagination, userId, bankAccountId, sort, filters.GetValues());
+			return await this.GetList<MandateDTO>(MethodKey.MandatesGetForBankAccount, pagination, sort, filters.GetValues(), userId, bankAccountId);
 		}
 
 		/// <summary>Cancels mandate.</summary>
@@ -102,7 +102,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterTransactions();
 
-			return await GetList<TransactionDTO>(MethodKey.MandatesGetTransactions, pagination, mandateId, sort, filters.GetValues());
+			return await GetList<TransactionDTO>(MethodKey.MandatesGetTransactions, pagination, sort, filters.GetValues(), mandateId);
 		}
 	}
 }

@@ -27,8 +27,11 @@ namespace MangoPay.SDK.Entities.POST
         /// <summary>Name of this user.</summary>
         public String Name { get; set; }
 
-        /// <summary>Type of legal user.</summary>
-        [JsonConverter(typeof(StringEnumConverter))]
+		/// <summary>Company Number</summary>
+		public String CompanyNumber { get; set; }
+
+		/// <summary>Type of legal user.</summary>
+		[JsonConverter(typeof(StringEnumConverter))]
         public LegalPersonType LegalPersonType { get; set; }
 
         /// <summary>Headquarters address.</summary>

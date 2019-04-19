@@ -192,6 +192,7 @@ namespace MangoPay.SDK.Tests
 			Random rand = new Random();
 			String color1 = (rand.Next(100000) + 100000).ToString();
 			String color2 = (rand.Next(100000) + 100000).ToString();
+			String headquartersPhoneNumber = (rand.Next(10000000, 99999999)).ToString();
 
 			client.PrimaryButtonColour = "#" + color1;
 			client.PrimaryThemeColour = "#" + color2;
@@ -212,6 +213,7 @@ namespace MangoPay.SDK.Tests
 				PostalCode = "51234",
 				Region = "Region"
 			};
+			client.HeadquartersPhoneNumber = headquartersPhoneNumber;
 
 			ClientDTO clientNew = await this.Api.Clients.Save(client);
 
@@ -241,6 +243,8 @@ namespace MangoPay.SDK.Tests
 			Assert.AreEqual(client.HeadquartersAddress.Country, CountryIso.FR);
 			Assert.AreEqual(client.HeadquartersAddress.PostalCode, "51234");
 			Assert.AreEqual(client.HeadquartersAddress.Region, "Region");
+			Assert.IsNotNull(client.HeadquartersPhoneNumber);
+			Assert.AreEqual(headquartersPhoneNumber, client.HeadquartersPhoneNumber);
 		}
 
 		[Test]
@@ -258,7 +262,7 @@ namespace MangoPay.SDK.Tests
 
 			ClientDTO clientNew = await this.Api.Clients.Save(client);
 
-			Assert.IsNotNull(clientNew);			
+			Assert.IsNotNull(clientNew);
 		}
 
 		[Test]

@@ -58,7 +58,7 @@ namespace MangoPay.SDK.Core.APIs
         /// <returns>Transactions for wallet returned from API.</returns>
         public async Task<ListPaginated<TransactionDTO>> GetTransactions(String walletId, Pagination pagination, FilterTransactions filter, Sort sort = null)
         {
-            return await this.GetList<TransactionDTO>(MethodKey.WalletsAllTransactions, pagination, walletId, sort, filter.GetValues());
+            return await this.GetList<TransactionDTO>(MethodKey.WalletsAllTransactions, pagination, sort, filter.GetValues(), walletId);
         }
 
         /// <summary>Gets transactions for the wallet.</summary>

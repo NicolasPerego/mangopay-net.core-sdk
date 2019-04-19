@@ -34,7 +34,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterDisputes();
 
-			return await this.GetList<DisputeDTO>(MethodKey.DisputesGetAll, pagination, null, sort, filters.GetValues());
+			return await this.GetList<DisputeDTO>(MethodKey.DisputesGetAll, pagination, sort, filters.GetValues());
 		}
 
 		/// <summary>Gets all disputes.</summary>
@@ -54,7 +54,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterTransactions();
 
-			return await this.GetList<TransactionDTO>(MethodKey.DisputesGetTransactions, pagination, disputeId, sort, filters.GetValues());
+			return await this.GetList<TransactionDTO>(MethodKey.DisputesGetTransactions, pagination, sort, filters.GetValues(), disputeId);
 		}
 
 		/// <summary>Gets dispute's documents for wallet.</summary>
@@ -67,7 +67,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterDisputes();
 
-			return await this.GetList<DisputeDTO>(MethodKey.DisputesGetForWallet, pagination, walletId, sort, filters.GetValues());
+			return await this.GetList<DisputeDTO>(MethodKey.DisputesGetForWallet, pagination, sort, filters.GetValues(), walletId);
 		}
 
 		/// <summary>Gets user's disputes.</summary>
@@ -80,7 +80,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterDisputes();
 
-			return await this.GetList<DisputeDTO>(MethodKey.DisputesGetForUser, pagination, userId, sort, filters.GetValues());
+			return await this.GetList<DisputeDTO>(MethodKey.DisputesGetForUser, pagination, sort, filters.GetValues(), userId);
 		}
 
         /// <summary>Gets Disputes which need settling.</summary>
@@ -110,7 +110,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterDisputeDocuments();
 
-			return await this.GetList<DisputeDocumentDTO>(MethodKey.DisputesDocumentGetForDispute, pagination, disputeId, sort, filters.GetValues());
+			return await this.GetList<DisputeDocumentDTO>(MethodKey.DisputesDocumentGetForDispute, pagination, sort, filters.GetValues(), disputeId);
 		}
 
 		/// <summary>Gets dispute's documents for client.</summary>
@@ -122,7 +122,7 @@ namespace MangoPay.SDK.Core.APIs
 		{
 			if (filters == null) filters = new FilterDisputeDocuments();
 
-			return await this.GetList<DisputeDocumentDTO>(MethodKey.DisputesDocumentGetForClient, pagination, null, sort, filters.GetValues());
+			return await this.GetList<DisputeDocumentDTO>(MethodKey.DisputesDocumentGetForClient, pagination, sort, filters.GetValues());
 		}
 
 		/// <summary>Gets repudiation.</summary>
@@ -270,7 +270,7 @@ namespace MangoPay.SDK.Core.APIs
 		public async Task<ListPaginated<DocumentConsultationDTO>> GetDocumentConsultations(String disputeDocumentId)
 		{
 			var endPoint = GetApiEndPoint(MethodKey.DisputesDocumentConsult);
-			endPoint.SetParameters(disputeDocumentId);
+			endPoint.SetParameters(new[] { disputeDocumentId });
 			var rest = new RestTool(_root, true);
 			return await rest.RequestList<DocumentConsultationDTO>(endPoint);
 		}

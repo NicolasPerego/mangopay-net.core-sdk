@@ -21,9 +21,9 @@ namespace MangoPay.SDK.Core.APIs
         public async Task<ListPaginated<EventDTO>> GetAll(Pagination pagination, FilterEvents filter = null, Sort sort = null)
         {
 			if (filter == null)
-				return await this.GetList<EventDTO>(MethodKey.EventsAll, pagination, "");
+				return await this.GetList<EventDTO>(MethodKey.EventsAll, pagination);
 
-            return await this.GetList<EventDTO>(MethodKey.EventsAll, pagination, "", sort, filter.GetValues());
+            return await this.GetList<EventDTO>(MethodKey.EventsAll, pagination, sort, filter.GetValues());
         }
     }
 }

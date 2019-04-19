@@ -2,6 +2,7 @@
 using MangoPay.SDK.Core.Enumerations;
 using MangoPay.SDK.Entities;
 using MangoPay.SDK.Entities.GET;
+using MangoPay.SDK.Entities.POST;
 using MangoPay.SDK.Entities.PUT;
 using NUnit.Framework;
 using System;
@@ -32,7 +33,38 @@ namespace MangoPay.SDK.Tests
             }
         }
 
-        [Test]
+		[Test]
+		public async Task Test_CardPreAuthorization_Create_WithBilling()
+		{
+			try
+			{
+				CardPreAuthorizationPostDTO cardPreAuthorization = await getPreAuthorization(GetJohn().Result.Id);
+				Billing billing = new Billing();
+				Address address = new Address();
+				address.City = "Test city";
+				address.AddressLine1 = "Test address line 1";
+				address.AddressLine2 = "Test address line 2";
+				address.Country = CountryIso.RO;
+				address.PostalCode = "65400";
+				billing.Address = address;
+				cardPreAuthorization.Billing = billing;
+
+				CardPreAuthorizationDTO cardPreAuthorizationWithBilling = await this.Api.CardPreAuthorizations.Create(cardPreAuthorization);
+
+				Assert.IsNotNull(cardPreAuthorizationWithBilling);
+				Assert.IsNotNull(cardPreAuthorizationWithBilling.Billing);
+				Assert.IsNotNull(cardPreAuthorizationWithBilling.SecurityInfo);
+				Assert.IsNotNull(cardPreAuthorizationWithBilling.SecurityInfo.AVSResult);
+				Assert.AreEqual(cardPreAuthorizationWithBilling.SecurityInfo.AVSResult, AVSResult.ADDRESS_MATCH_ONLY);
+
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
+
+		[Test]
         public async Task Test_CardPreAuthorization_Get()
         {
             try

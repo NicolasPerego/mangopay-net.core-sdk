@@ -9,51 +9,51 @@ using System.Threading.Tasks;
 
 namespace MangoPay.SDK.Tests
 {
-    [TestFixture]
-    public class ApiPayInsTest : BaseTest
-    {
-        [Test]
-        public async Task Test_PayIns_Create_CardWeb()
-        {
-            try
-            {
-                PayInDTO payIn = null;
-                payIn = await this.GetJohnsPayInCardWeb();
+	[TestFixture]
+	public class ApiPayInsTest : BaseTest
+	{
+		[Test]
+		public async Task Test_PayIns_Create_CardWeb()
+		{
+			try
+			{
+				PayInDTO payIn = null;
+				payIn = await this.GetJohnsPayInCardWeb();
 
-                Assert.IsTrue(payIn.Id.Length > 0);
-                Assert.IsTrue(payIn.PaymentType == PayInPaymentType.CARD);
-                Assert.IsTrue(payIn.ExecutionType == PayInExecutionType.WEB);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+				Assert.IsTrue(payIn.Id.Length > 0);
+				Assert.IsTrue(payIn.PaymentType == PayInPaymentType.CARD);
+				Assert.IsTrue(payIn.ExecutionType == PayInExecutionType.WEB);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
 
-        [Test]
-        public async Task Test_PayIns_Get_CardWeb()
-        {
-            try
-            {
-                PayInDTO payIn = null;
-                payIn = await this.GetJohnsPayInCardWeb();
+		[Test]
+		public async Task Test_PayIns_Get_CardWeb()
+		{
+			try
+			{
+				PayInDTO payIn = null;
+				payIn = await this.GetJohnsPayInCardWeb();
 
-                PayInDTO getPayIn = await this.Api.PayIns.Get(payIn.Id);
+				PayInDTO getPayIn = await this.Api.PayIns.Get(payIn.Id);
 
-                Assert.IsTrue(payIn.Id == getPayIn.Id);
-                Assert.IsTrue(payIn.PaymentType == PayInPaymentType.CARD);
-                Assert.IsTrue(payIn.ExecutionType == PayInExecutionType.WEB);
+				Assert.IsTrue(payIn.Id == getPayIn.Id);
+				Assert.IsTrue(payIn.PaymentType == PayInPaymentType.CARD);
+				Assert.IsTrue(payIn.ExecutionType == PayInExecutionType.WEB);
 
-                AssertEqualInputProps(payIn, getPayIn);
+				AssertEqualInputProps(payIn, getPayIn);
 
-                Assert.IsTrue(getPayIn.Status == TransactionStatus.CREATED);
-                Assert.IsNull(getPayIn.ExecutionDate);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+				Assert.IsTrue(getPayIn.Status == TransactionStatus.CREATED);
+				Assert.IsNull(getPayIn.ExecutionDate);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
 
 		[Test]
 		public async Task Test_PayIns_Create_PayPal()
@@ -102,7 +102,7 @@ namespace MangoPay.SDK.Tests
 
 				Assert.IsNotNull(payIn.ShippingAddress);
 				Assert.AreEqual("recipient name", payIn.ShippingAddress.RecipientName);
-				Assert.IsNotNull(payIn.ShippingAddress.Address);				
+				Assert.IsNotNull(payIn.ShippingAddress.Address);
 				Assert.AreEqual("Address line 1", payIn.ShippingAddress.Address.AddressLine1);
 				Assert.AreEqual("Address line 2", payIn.ShippingAddress.Address.AddressLine2);
 				Assert.AreEqual("City", payIn.ShippingAddress.Address.City);
@@ -117,147 +117,179 @@ namespace MangoPay.SDK.Tests
 		}
 
 		[Test]
-        public async Task Test_PayIns_Create_CardDirect()
-        {
-            try
-            {
-                WalletDTO johnWallet = await this.GetJohnsWalletWithMoney();
-                WalletDTO beforeWallet = await this.Api.Wallets.Get(johnWallet.Id);
+		public async Task Test_PayIns_Create_CardDirect()
+		{
+			try
+			{
+				WalletDTO johnWallet = await this.GetJohnsWalletWithMoney();
+				WalletDTO beforeWallet = await this.Api.Wallets.Get(johnWallet.Id);
 
-                PayInDTO payIn = await this.GetNewPayInCardDirect();
-                WalletDTO wallet = await this.Api.Wallets.Get(johnWallet.Id);
-                UserNaturalDTO user = await this.GetJohn();
+				PayInDTO payIn = await this.GetNewPayInCardDirect();
+				WalletDTO wallet = await this.Api.Wallets.Get(johnWallet.Id);
+				UserNaturalDTO user = await this.GetJohn();
 
-                Assert.IsTrue(payIn.Id.Length > 0);
-                Assert.AreEqual(wallet.Id, payIn.CreditedWalletId);
-                Assert.AreEqual(PayInPaymentType.CARD, payIn.PaymentType);
-                Assert.AreEqual(PayInExecutionType.DIRECT, payIn.ExecutionType);
-                Assert.IsTrue(payIn.DebitedFunds is Money);
-                Assert.IsTrue(payIn.CreditedFunds is Money);
-                Assert.IsTrue(payIn.Fees is Money);
-                Assert.AreEqual(user.Id, payIn.AuthorId);
-                Assert.IsTrue(wallet.Balance.Amount == beforeWallet.Balance.Amount + payIn.CreditedFunds.Amount);
-                Assert.AreEqual(TransactionStatus.SUCCEEDED, payIn.Status);
-                Assert.AreEqual(TransactionType.PAYIN, payIn.Type);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+				Assert.IsTrue(payIn.Id.Length > 0);
+				Assert.AreEqual(wallet.Id, payIn.CreditedWalletId);
+				Assert.AreEqual(PayInPaymentType.CARD, payIn.PaymentType);
+				Assert.AreEqual(PayInExecutionType.DIRECT, payIn.ExecutionType);
+				Assert.IsTrue(payIn.DebitedFunds is Money);
+				Assert.IsTrue(payIn.CreditedFunds is Money);
+				Assert.IsTrue(payIn.Fees is Money);
+				Assert.AreEqual(user.Id, payIn.AuthorId);
+				Assert.IsTrue(wallet.Balance.Amount == beforeWallet.Balance.Amount + payIn.CreditedFunds.Amount);
+				Assert.AreEqual(TransactionStatus.SUCCEEDED, payIn.Status);
+				Assert.AreEqual(TransactionType.PAYIN, payIn.Type);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
 
-        [Test]
-        public async Task Test_PayIns_Get_CardDirect()
-        {
-            try
-            {
-                PayInCardDirectDTO payIn = await this.GetNewPayInCardDirect();
+		[Test]
+		public async Task Test_Payins_CardDirect_Create_WithBilling()
+		{
+			try
+			{
+				WalletDTO johnWallet = await this.GetJohnsWalletWithMoney();
+				WalletDTO wallet = await this.Api.Wallets.Get(johnWallet.Id);
+				UserNaturalDTO user = await this.GetJohn();
 
-                PayInCardDirectDTO getPayIn = await this.Api.PayIns.GetCardDirect(payIn.Id);
+				PayInCardDirectDTO payIn = await this.GetNewPayInCardDirectWithBilling();
 
-                Assert.IsTrue(payIn.Id == getPayIn.Id);
-                Assert.IsTrue(payIn.PaymentType == PayInPaymentType.CARD);
-                Assert.IsTrue(payIn.ExecutionType == PayInExecutionType.DIRECT);
-                AssertEqualInputProps(payIn, getPayIn);
-                Assert.IsNotNull(getPayIn.CardId);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+				Assert.IsTrue(payIn.Id.Length > 0);
+				Assert.AreEqual(wallet.Id, payIn.CreditedWalletId);
+				Assert.AreEqual(PayInPaymentType.CARD, payIn.PaymentType);
+				Assert.AreEqual(PayInExecutionType.DIRECT, payIn.ExecutionType);
+				Assert.IsTrue(payIn.DebitedFunds is Money);
+				Assert.IsTrue(payIn.CreditedFunds is Money);
+				Assert.IsTrue(payIn.Fees is Money);
+				Assert.AreEqual(user.Id, payIn.AuthorId);
+				Assert.AreEqual(TransactionStatus.SUCCEEDED, payIn.Status);
+				Assert.AreEqual(TransactionType.PAYIN, payIn.Type);
+				Assert.IsNotNull(payIn.Billing);
+				Assert.IsNotNull(payIn.SecurityInfo);
+				Assert.IsNotNull(payIn.SecurityInfo.AVSResult);
+				Assert.AreEqual(payIn.SecurityInfo.AVSResult, AVSResult.ADDRESS_MATCH_ONLY);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
 
-        [Test]
-        public async Task Test_PayIns_CreateRefund_CardDirect()
-        {
-            try
-            {
-                PayInDTO payIn = await this.GetNewPayInCardDirect();
-                WalletDTO wallet = await this.GetJohnsWalletWithMoney();
-                WalletDTO walletBefore = await this.Api.Wallets.Get(wallet.Id);
+		[Test]
+		public async Task Test_PayIns_Get_CardDirect()
+		{
+			try
+			{
+				PayInCardDirectDTO payIn = await this.GetNewPayInCardDirect();
 
-                RefundDTO refund = await this.GetNewRefundForPayIn(payIn);
-                WalletDTO walletAfter = await this.Api.Wallets.Get(wallet.Id);
+				PayInCardDirectDTO getPayIn = await this.Api.PayIns.GetCardDirect(payIn.Id);
 
-                Assert.IsTrue(refund.Id.Length > 0);
-                Assert.IsTrue(refund.DebitedFunds.Amount == payIn.DebitedFunds.Amount);
-                Assert.IsTrue(walletBefore.Balance.Amount == (walletAfter.Balance.Amount + payIn.DebitedFunds.Amount));
-                Assert.AreEqual(TransactionType.PAYOUT, refund.Type);
-                Assert.AreEqual(TransactionNature.REFUND, refund.Nature);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+				Assert.IsTrue(payIn.Id == getPayIn.Id);
+				Assert.IsTrue(payIn.PaymentType == PayInPaymentType.CARD);
+				Assert.IsTrue(payIn.ExecutionType == PayInExecutionType.DIRECT);
+				AssertEqualInputProps(payIn, getPayIn);
+				Assert.IsNotNull(getPayIn.CardId);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
 
-        [Test]
-        public async Task Test_PayIns_PreAuthorizedDirect()
-        {
-            try
-            {
-                CardPreAuthorizationDTO cardPreAuthorization = await this.GetJohnsCardPreAuthorization();
-                WalletDTO wallet = await this.GetJohnsWalletWithMoney();
-                UserNaturalDTO user = await this.GetJohn();
+		[Test]
+		public async Task Test_PayIns_CreateRefund_CardDirect()
+		{
+			try
+			{
+				PayInDTO payIn = await this.GetNewPayInCardDirect();
+				WalletDTO wallet = await this.GetJohnsWalletWithMoney();
+				WalletDTO walletBefore = await this.Api.Wallets.Get(wallet.Id);
 
-                // create pay-in PRE-AUTHORIZED DIRECT
-                PayInPreauthorizedDirectPostDTO payIn = new PayInPreauthorizedDirectPostDTO(user.Id, new Money { Amount = 10000, Currency = CurrencyIso.EUR }, new Money { Amount = 0, Currency = CurrencyIso.EUR }, wallet.Id, cardPreAuthorization.Id);
-               
-                payIn.SecureModeReturnURL = "http://test.com";
+				RefundDTO refund = await this.GetNewRefundForPayIn(payIn);
+				WalletDTO walletAfter = await this.Api.Wallets.Get(wallet.Id);
 
-                PayInPreauthorizedDirectDTO createPayIn = await this.Api.PayIns.CreatePreauthorizedDirect(payIn);
+				Assert.IsTrue(refund.Id.Length > 0);
+				Assert.IsTrue(refund.DebitedFunds.Amount == payIn.DebitedFunds.Amount);
+				Assert.IsTrue(walletBefore.Balance.Amount == (walletAfter.Balance.Amount + payIn.DebitedFunds.Amount));
+				Assert.AreEqual(TransactionType.PAYOUT, refund.Type);
+				Assert.AreEqual(TransactionNature.REFUND, refund.Nature);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
 
-                Assert.IsTrue("" != createPayIn.Id);
-                Assert.AreEqual(wallet.Id, createPayIn.CreditedWalletId);
-                Assert.AreEqual(PayInPaymentType.PREAUTHORIZED, createPayIn.PaymentType);
-                Assert.AreEqual(PayInExecutionType.DIRECT, createPayIn.ExecutionType);
-                Assert.IsTrue(createPayIn.DebitedFunds is Money);
-                Assert.IsTrue(createPayIn.CreditedFunds is Money);
-                Assert.IsTrue(createPayIn.Fees is Money);
-                Assert.AreEqual(user.Id, createPayIn.AuthorId);
-                Assert.AreEqual(TransactionStatus.SUCCEEDED, createPayIn.Status);
-                Assert.AreEqual(TransactionType.PAYIN, createPayIn.Type);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+		[Test]
+		public async Task Test_PayIns_PreAuthorizedDirect()
+		{
+			try
+			{
+				CardPreAuthorizationDTO cardPreAuthorization = await this.GetJohnsCardPreAuthorization();
+				WalletDTO wallet = await this.GetJohnsWalletWithMoney();
+				UserNaturalDTO user = await this.GetJohn();
 
-        [Test]
-        public async Task Test_PayIns_BankWireDirect_Create()
-        {
-            try
-            {
-                WalletDTO wallet = await this.GetJohnsWallet();
-                UserNaturalDTO user = await this.GetJohn();
+				// create pay-in PRE-AUTHORIZED DIRECT
+				PayInPreauthorizedDirectPostDTO payIn = new PayInPreauthorizedDirectPostDTO(user.Id, new Money { Amount = 10000, Currency = CurrencyIso.EUR }, new Money { Amount = 0, Currency = CurrencyIso.EUR }, wallet.Id, cardPreAuthorization.Id);
 
-                // create pay-in BANKWIRE DIRECT
-                PayInBankWireDirectPostDTO payIn = new PayInBankWireDirectPostDTO(user.Id, wallet.Id, new Money { Amount = 10000, Currency = CurrencyIso.EUR }, new Money { Amount = 0, Currency = CurrencyIso.EUR });
-                payIn.CreditedWalletId = wallet.Id;
-                payIn.AuthorId = user.Id;
+				payIn.SecureModeReturnURL = "http://test.com";
 
-                PayInDTO createPayIn = await this.Api.PayIns.CreateBankWireDirect(payIn);
+				PayInPreauthorizedDirectDTO createPayIn = await this.Api.PayIns.CreatePreauthorizedDirect(payIn);
 
-                Assert.IsTrue(createPayIn.Id.Length > 0);
-                Assert.AreEqual(wallet.Id, createPayIn.CreditedWalletId);
-                Assert.AreEqual(PayInPaymentType.BANK_WIRE, createPayIn.PaymentType);
-                Assert.AreEqual(PayInExecutionType.DIRECT, createPayIn.ExecutionType);
-                Assert.AreEqual(user.Id, createPayIn.AuthorId);
-                Assert.AreEqual(TransactionStatus.CREATED, createPayIn.Status);
-                Assert.AreEqual(TransactionType.PAYIN, createPayIn.Type);
-                Assert.IsNotNull(((PayInBankWireDirectDTO)createPayIn).WireReference);
-                Assert.AreEqual(((PayInBankWireDirectDTO)createPayIn).BankAccount.Type, BankAccountType.IBAN);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+				Assert.IsTrue("" != createPayIn.Id);
+				Assert.AreEqual(wallet.Id, createPayIn.CreditedWalletId);
+				Assert.AreEqual(PayInPaymentType.PREAUTHORIZED, createPayIn.PaymentType);
+				Assert.AreEqual(PayInExecutionType.DIRECT, createPayIn.ExecutionType);
+				Assert.IsTrue(createPayIn.DebitedFunds is Money);
+				Assert.IsTrue(createPayIn.CreditedFunds is Money);
+				Assert.IsTrue(createPayIn.Fees is Money);
+				Assert.AreEqual(user.Id, createPayIn.AuthorId);
+				Assert.AreEqual(TransactionStatus.SUCCEEDED, createPayIn.Status);
+				Assert.AreEqual(TransactionType.PAYIN, createPayIn.Type);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
+
+		[Test]
+		public async Task Test_PayIns_BankWireDirect_Create()
+		{
+			try
+			{
+				WalletDTO wallet = await this.GetJohnsWallet();
+				UserNaturalDTO user = await this.GetJohn();
+
+				// create pay-in BANKWIRE DIRECT
+				PayInBankWireDirectPostDTO payIn = new PayInBankWireDirectPostDTO(user.Id, wallet.Id, new Money { Amount = 10000, Currency = CurrencyIso.EUR }, new Money { Amount = 0, Currency = CurrencyIso.EUR });
+				payIn.CreditedWalletId = wallet.Id;
+				payIn.AuthorId = user.Id;
+
+				PayInDTO createPayIn = await this.Api.PayIns.CreateBankWireDirect(payIn);
+
+				Assert.IsTrue(createPayIn.Id.Length > 0);
+				Assert.AreEqual(wallet.Id, createPayIn.CreditedWalletId);
+				Assert.AreEqual(PayInPaymentType.BANK_WIRE, createPayIn.PaymentType);
+				Assert.AreEqual(PayInExecutionType.DIRECT, createPayIn.ExecutionType);
+				Assert.AreEqual(user.Id, createPayIn.AuthorId);
+				Assert.AreEqual(TransactionStatus.CREATED, createPayIn.Status);
+				Assert.AreEqual(TransactionType.PAYIN, createPayIn.Type);
+				Assert.IsNotNull(((PayInBankWireDirectDTO)createPayIn).WireReference);
+				Assert.AreEqual(((PayInBankWireDirectDTO)createPayIn).BankAccount.Type, BankAccountType.IBAN);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
 
 		/*
 		 * Uncomment the attribute below to test payins with a mandate
-		 * await this test needs your manual confirmation on the web page (see note in test's body)
+		 * This test needs your manual confirmation on the web page (see note in test's body)
 		 */
 		//[Test]
 		public async Task Test_PayIns_MandateDirect_Create_Get()
@@ -266,18 +298,18 @@ namespace MangoPay.SDK.Tests
 			{
 				WalletDTO wallet = await this.GetJohnsWallet();
 				UserNaturalDTO user = await this.GetJohn();
-                var temp = await this.GetJohnsAccount();
-                string bankAccountId = temp.Id;
+
+				string bankAccountId = this.GetJohnsAccount().Result.Id;
 				string returnUrl = "http://test.test";
 				MandatePostDTO mandatePost = new MandatePostDTO(bankAccountId, CultureCode.EN, returnUrl);
 				MandateDTO mandate = await this.Api.Mandates.Create(mandatePost);
 
-				/*	
+				/*
 				 *	! IMPORTANT NOTE !
-				 *	
-				 *	In order to make await this test pass, at await this place you have to set a breakpoint,
+				 *
+				 *	In order to make this test pass, at this place you have to set a breakpoint,
 				 *	navigate to URL the mandate.RedirectURL property points to and click "CONFIRM" button.
-				 * 
+				 *
 				 */
 
 				PayInMandateDirectPostDTO payIn = new PayInMandateDirectPostDTO(user.Id, new Money { Amount = 10000, Currency = CurrencyIso.EUR }, new Money { Amount = 0, Currency = CurrencyIso.EUR }, wallet.Id, "http://test.test", mandate.Id);
@@ -285,7 +317,7 @@ namespace MangoPay.SDK.Tests
 				PayInDTO createPayIn = await this.Api.PayIns.CreateMandateDirectDebit(payIn);
 
 				Assert.IsNotNull(createPayIn);
-				Assert.AreNotEqual(TransactionStatus.FAILED, createPayIn.Status, "In order to make await this test pass, after creating mandate and before creating the payin you have to navigate to URL the mandate.RedirectURL property points to and click CONFIRM button.");
+				Assert.AreNotEqual(TransactionStatus.FAILED, createPayIn.Status, "In order to make this test pass, after creating mandate and before creating the payin you have to navigate to URL the mandate.RedirectURL property points to and click CONFIRM button.");
 
 				Assert.IsTrue(createPayIn.Id.Length > 0);
 				Assert.AreEqual(wallet.Id, createPayIn.CreditedWalletId);
@@ -308,85 +340,85 @@ namespace MangoPay.SDK.Tests
 			}
 		}
 
-        [Test]
-        public async Task Test_PayIns_BankWireDirect_Get()
-        {
-            try
-            {
-                WalletDTO wallet = await this.GetJohnsWallet();
-                UserNaturalDTO user = await this.GetJohn();
+		[Test]
+		public async Task Test_PayIns_BankWireDirect_Get()
+		{
+			try
+			{
+				WalletDTO wallet = await this.GetJohnsWallet();
+				UserNaturalDTO user = await this.GetJohn();
 
-                // create pay-in BANKWIRE DIRECT
-                PayInBankWireDirectPostDTO payIn = new PayInBankWireDirectPostDTO(user.Id, wallet.Id, new Money { Amount = 10000, Currency = CurrencyIso.EUR }, new Money { Amount = 0, Currency = CurrencyIso.EUR });
-                payIn.CreditedWalletId = wallet.Id;
-                payIn.AuthorId = user.Id;
+				// create pay-in BANKWIRE DIRECT
+				PayInBankWireDirectPostDTO payIn = new PayInBankWireDirectPostDTO(user.Id, wallet.Id, new Money { Amount = 10000, Currency = CurrencyIso.EUR }, new Money { Amount = 0, Currency = CurrencyIso.EUR });
+				payIn.CreditedWalletId = wallet.Id;
+				payIn.AuthorId = user.Id;
 
-                PayInBankWireDirectDTO createdPayIn = await this.Api.PayIns.CreateBankWireDirect(payIn);
+				PayInBankWireDirectDTO createdPayIn = await this.Api.PayIns.CreateBankWireDirect(payIn);
 
-                PayInBankWireDirectDTO getPayIn = await this.Api.PayIns.GetBankWireDirect(createdPayIn.Id);
+				PayInBankWireDirectDTO getPayIn = await this.Api.PayIns.GetBankWireDirect(createdPayIn.Id);
 
-                Assert.AreEqual(getPayIn.Id, createdPayIn.Id);
-                Assert.AreEqual(PayInPaymentType.BANK_WIRE, getPayIn.PaymentType);
-                Assert.AreEqual(PayInExecutionType.DIRECT, getPayIn.ExecutionType);
-                Assert.AreEqual(user.Id, getPayIn.AuthorId);
-                Assert.AreEqual(TransactionType.PAYIN, getPayIn.Type);
-                Assert.IsNotNull(getPayIn.WireReference);
-                Assert.AreEqual(getPayIn.BankAccount.Type, BankAccountType.IBAN);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+				Assert.AreEqual(getPayIn.Id, createdPayIn.Id);
+				Assert.AreEqual(PayInPaymentType.BANK_WIRE, getPayIn.PaymentType);
+				Assert.AreEqual(PayInExecutionType.DIRECT, getPayIn.ExecutionType);
+				Assert.AreEqual(user.Id, getPayIn.AuthorId);
+				Assert.AreEqual(TransactionType.PAYIN, getPayIn.Type);
+				Assert.IsNotNull(getPayIn.WireReference);
+				Assert.AreEqual(getPayIn.BankAccount.Type, BankAccountType.IBAN);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
 
-        [Test]
-        public async Task Test_PayIns_DirectDebit_Create_Get()
-        {
-            WalletDTO wallet = await this.GetJohnsWallet();
-            UserNaturalDTO user = await this.GetJohn();
-            // create pay-in DIRECT DEBIT
-            PayInDirectDebitPostDTO payIn = new PayInDirectDebitPostDTO(user.Id, new Money { Amount = 10000, Currency = CurrencyIso.EUR }, new Money { Amount = 100, Currency = CurrencyIso.EUR }, wallet.Id, "http://www.mysite.com/returnURL/", CultureCode.FR, DirectDebitType.GIROPAY);
+		[Test]
+		public async Task Test_PayIns_DirectDebit_Create_Get()
+		{
+			WalletDTO wallet = await this.GetJohnsWallet();
+			UserNaturalDTO user = await this.GetJohn();
+			// create pay-in DIRECT DEBIT
+			PayInDirectDebitPostDTO payIn = new PayInDirectDebitPostDTO(user.Id, new Money { Amount = 10000, Currency = CurrencyIso.EUR }, new Money { Amount = 100, Currency = CurrencyIso.EUR }, wallet.Id, "http://www.mysite.com/returnURL/", CultureCode.FR, DirectDebitType.GIROPAY);
 
-            payIn.TemplateURLOptions = new TemplateURLOptions { PAYLINE = "https://www.maysite.com/payline_template/" };
-            payIn.Tag = "DirectDebit test tag";
+			payIn.TemplateURLOptions = new TemplateURLOptions { PAYLINE = "https://www.maysite.com/payline_template/" };
+			payIn.Tag = "DirectDebit test tag";
 
-            PayInDirectDebitDTO createPayIn = await this.Api.PayIns.CreateDirectDebit(payIn);
+			PayInDirectDebitDTO createPayIn = await this.Api.PayIns.CreateDirectDebit(payIn);
 
-            Assert.IsNotNull(createPayIn);
-            Assert.IsTrue(createPayIn.Id.Length > 0);
-            Assert.AreEqual(wallet.Id, createPayIn.CreditedWalletId);
-            Assert.IsTrue(createPayIn.PaymentType == PayInPaymentType.DIRECT_DEBIT);
-            Assert.IsTrue(createPayIn.DirectDebitType == DirectDebitType.GIROPAY);
-            Assert.IsTrue(createPayIn.Culture == CultureCode.FR);
-            Assert.AreEqual(user.Id, createPayIn.AuthorId);
-            Assert.IsTrue(createPayIn.Status == TransactionStatus.CREATED);
-            Assert.IsTrue(createPayIn.Type == TransactionType.PAYIN);
-            Assert.IsNotNull(createPayIn.DebitedFunds);
-            Assert.IsTrue(createPayIn.DebitedFunds is Money);
-            Assert.AreEqual(10000, createPayIn.DebitedFunds.Amount);
-            Assert.IsTrue(createPayIn.DebitedFunds.Currency == CurrencyIso.EUR);
+			Assert.IsNotNull(createPayIn);
+			Assert.IsTrue(createPayIn.Id.Length > 0);
+			Assert.AreEqual(wallet.Id, createPayIn.CreditedWalletId);
+			Assert.IsTrue(createPayIn.PaymentType == PayInPaymentType.DIRECT_DEBIT);
+			Assert.IsTrue(createPayIn.DirectDebitType == DirectDebitType.GIROPAY);
+			Assert.IsTrue(createPayIn.Culture == CultureCode.FR);
+			Assert.AreEqual(user.Id, createPayIn.AuthorId);
+			Assert.IsTrue(createPayIn.Status == TransactionStatus.CREATED);
+			Assert.IsTrue(createPayIn.Type == TransactionType.PAYIN);
+			Assert.IsNotNull(createPayIn.DebitedFunds);
+			Assert.IsTrue(createPayIn.DebitedFunds is Money);
+			Assert.AreEqual(10000, createPayIn.DebitedFunds.Amount);
+			Assert.IsTrue(createPayIn.DebitedFunds.Currency == CurrencyIso.EUR);
 
-            Assert.IsNotNull(createPayIn.CreditedFunds);
-            Assert.IsTrue(createPayIn.CreditedFunds is Money);
-            Assert.AreEqual(9900, createPayIn.CreditedFunds.Amount);
-            Assert.IsTrue(createPayIn.CreditedFunds.Currency == CurrencyIso.EUR);
+			Assert.IsNotNull(createPayIn.CreditedFunds);
+			Assert.IsTrue(createPayIn.CreditedFunds is Money);
+			Assert.AreEqual(9900, createPayIn.CreditedFunds.Amount);
+			Assert.IsTrue(createPayIn.CreditedFunds.Currency == CurrencyIso.EUR);
 
-            Assert.IsNotNull(createPayIn.Fees);
-            Assert.IsTrue(createPayIn.Fees is Money);
-            Assert.AreEqual(100, createPayIn.Fees.Amount);
-            Assert.IsTrue(createPayIn.Fees.Currency == CurrencyIso.EUR);
+			Assert.IsNotNull(createPayIn.Fees);
+			Assert.IsTrue(createPayIn.Fees is Money);
+			Assert.AreEqual(100, createPayIn.Fees.Amount);
+			Assert.IsTrue(createPayIn.Fees.Currency == CurrencyIso.EUR);
 
-            Assert.IsNotNull(createPayIn.ReturnURL);
-            Assert.IsNotNull(createPayIn.RedirectURL);
-            Assert.IsNotNull(createPayIn.TemplateURL);
+			Assert.IsNotNull(createPayIn.ReturnURL);
+			Assert.IsNotNull(createPayIn.RedirectURL);
+			Assert.IsNotNull(createPayIn.TemplateURL);
 
 
-            PayInDirectDebitDTO getPayIn = await this.Api.PayIns.GetDirectDebit(createPayIn.Id);
+			PayInDirectDebitDTO getPayIn = await this.Api.PayIns.GetDirectDebit(createPayIn.Id);
 
-            Assert.IsNotNull(getPayIn);
-            Assert.IsTrue(getPayIn.Id == createPayIn.Id);
-            Assert.IsTrue(getPayIn.Tag == createPayIn.Tag);
-        }
+			Assert.IsNotNull(getPayIn);
+			Assert.IsTrue(getPayIn.Id == createPayIn.Id);
+			Assert.IsTrue(getPayIn.Tag == createPayIn.Tag);
+		}
 
 		[Test]
 		public async Task Test_PayIns_Get_PayPal()
@@ -448,6 +480,27 @@ namespace MangoPay.SDK.Tests
 				Assert.AreEqual(CountryIso.PL, getPayIn.ShippingAddress.Address.Country);
 				Assert.AreEqual("11222", getPayIn.ShippingAddress.Address.PostalCode);
 				Assert.AreEqual("Region", getPayIn.ShippingAddress.Address.Region);
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
+
+		[Test]
+		public async Task Test_PayIns_Get_PayPal_WithPayPalBuyerAccountEmail()
+		{
+			try
+			{
+				string payInId = "54088959";
+				string payPalBuyerEmail = "paypal-buyer-user@mangopay.com";
+				PayInPayPalDTO payIn = await Api.PayIns.GetPayPal(payInId);
+
+				Assert.NotNull(payIn);
+				Assert.NotNull(payIn.Id);
+				Assert.NotNull(payIn.PaypalBuyerAccountEmail);
+				Assert.AreEqual(payInId, payIn.Id);
+				Assert.AreEqual(payPalBuyerEmail, payIn.PaypalBuyerAccountEmail);
 			}
 			catch (Exception ex)
 			{

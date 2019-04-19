@@ -33,5 +33,48 @@ namespace MangoPay.SDK.Tests
 				Assert.Fail(ex.Message);
 			}
 		}
+
+		[Test]
+		public async Task Test_Card_GetByFingerprint()
+		{
+			PayInCardDirectDTO payIn = await GetNewPayInCardDirect();
+			Assert.IsNotNull(payIn, "PayIn object is null!");
+			CardDTO card = await Api.Cards.Get(payIn.CardId);
+
+			Assert.IsNotNull(card, "Card is null!");
+			Assert.IsNotNull(card.Fingerprint, "Card fingerprint is null!");
+			Assert.IsNotEmpty(card.Fingerprint, "Card fingerprint is empty!");
+
+			ListPaginated<CardDTO> cards = await Api.Cards.GetCardsByFingerprint(card.Fingerprint);
+
+			Assert.True(cards.Count > 0, "Card lsit is empty");
+
+			foreach (CardDTO cardDTO in cards)
+			{
+				Assert.AreEqual(card.Fingerprint, cardDTO.Fingerprint);
+			}
+		}
+
+		[Test]
+		public async Task Test_Card_GetByFingerprint_Paginated()
+		{
+			PayInCardDirectDTO payIn = await GetNewPayInCardDirect();
+			Assert.IsNotNull(payIn, "PayIn object is null!");
+			CardDTO card = await Api.Cards.Get(payIn.CardId);
+
+			Assert.IsNotNull(card, "Card is null!");
+			Assert.IsNotNull(card.Fingerprint, "Card fingerprint is null!");
+			Assert.IsNotEmpty(card.Fingerprint, "Card fingerprint is empty!");
+
+			Pagination pagination = new Pagination(1, 1);
+			ListPaginated<CardDTO> cards = await Api.Cards.GetCardsByFingerprint(card.Fingerprint, pagination, null);
+
+			Assert.True(cards.Count == 1, String.Format("Requested 1 entity, got {0}", cards.Count));
+
+			foreach (CardDTO cardDTO in cards)
+			{
+				Assert.AreEqual(card.Fingerprint, cardDTO.Fingerprint);
+			}
+		}
 	}
 }

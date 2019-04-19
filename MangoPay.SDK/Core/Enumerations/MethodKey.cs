@@ -13,7 +13,8 @@ namespace MangoPay.SDK.Core.Enumerations
         CardRegistrationSave,
         CardPreauthorizations,
         CardTransactions,
-        EventsAll,
+		CardByFingerprintGet,
+		EventsAll,
         HooksAll,
         HooksCreate,
         HooksGet,
@@ -92,12 +93,12 @@ namespace MangoPay.SDK.Core.Enumerations
         ClientGet,
         ClientSave,
         ClientUploadLogo,
-        
+
         DisputesGet,
         DisputesSaveTag,
         DisputesSaveContestFunds,
         DisputeSaveClose,
-        DisputesGetTransactions,        
+        DisputesGetTransactions,
         DisputesGetAll,
         DisputesGetForWallet,
         DisputesGetForUser,
@@ -145,6 +146,11 @@ namespace MangoPay.SDK.Core.Enumerations
 
 		UboDeclarationCreate,
 		UboDeclarationUpdate,
+		UboDeclarationsGet,
+		UboDeclarationGet,
+		UboGet,
+		UboCreate,
+		UboUpdate,
 
 		BankAccountsGetTransactions
 	}

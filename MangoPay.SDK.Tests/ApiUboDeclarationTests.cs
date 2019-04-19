@@ -1,128 +1,167 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using MangoPay.SDK.Core.Enumerations;
+using MangoPay.SDK.Entities;
 using MangoPay.SDK.Entities.GET;
 using MangoPay.SDK.Entities.POST;
-using NUnit.Framework;
-using System.Collections.Generic;
-using System.Linq;
 using MangoPay.SDK.Entities.PUT;
-using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace MangoPay.SDK.Tests
 {
-
 	[TestFixture]
 	public class ApiUboDeclarationTests : BaseTest
 	{
+		[SetUp]
+		public async Task SetUp()
+		{
+			_mangopayApi = BuildNewMangoPayApi();
+		}
+
 		private MangoPayApi _mangopayApi;
 
-		private List<UserNaturalDTO> _userNaturalCollection;
-
-		public List<UserNaturalDTO> UserNaturallCollection
+		private static List<UboPostDTO> UboPostDtoCollection
 		{
 			get
 			{
-				if (_userNaturalCollection == null)
+				var address = new Address
 				{
-					_userNaturalCollection = new List<UserNaturalDTO>();
-				}
+					AddressLine1 = "Address line Natural1 1",
+					AddressLine2 = "Address line Natural1 2",
+					City = "CityNatural1",
+					Country = CountryIso.PL,
+					PostalCode = "11222",
+					Region = "RegionNatural1"
+				};
+				var birthDate = new DateTime(1985, 12, 21, 0, 0, 0);
+				var birthPlace = new Birthplace
+				{
+					City = "CityNatural1",
+					Country = CountryIso.PL
+				};
 
-				return _userNaturalCollection;
-			}
-			set
-			{
-				_userNaturalCollection = value;
-			}
-		}		
-
-		private UboRefusedReasonType[] RefusedReasons
-		{
-			get
-			{
-				return new UboRefusedReasonType[] {
-				  UboRefusedReasonType.INVALID_DECLARED_UBO,
-				  UboRefusedReasonType.INVALID_UBO_DETAILS
+				return new List<UboPostDTO>
+				{
+					new UboPostDTO("JohnNatural1", "DoeNatural1", address, CountryIso.DE, birthDate, birthPlace),
+					new UboPostDTO("JohnNatural2", "DoeNatural2", address, CountryIso.DE, birthDate, birthPlace)
 				};
 			}
 		}
 
-		[SetUp]
-		public void SetUp()
+		//Ubo tests
+
+		[Test]
+		public async Task ApiUbo_Create_Ubo_Valid()
 		{
-			_mangopayApi = BuildNewMangoPayApi();
+			var userLegal = await Api.Users.Create(CreateUserLegalPost());
+			var uboDeclaration = await Api.UboDeclarations.CreateUboDeclaration(null, userLegal.Id);
+			var uboDto = UboPostDtoCollection[0];
+			UboDTO result = null;
+			Assert.DoesNotThrow(() => result = Api.UboDeclarations.CreateUbo(uboDto, userLegal.Id, uboDeclaration.Id).Result);
+			Assert.NotNull(result);
+		}
+
+		[Test]
+		public async Task ApiUbo_Update_Ubo_Valid()
+		{
+			var userLegal = await Api.Users.Create(CreateUserLegalPost());
+			var uboDeclaration = await Api.UboDeclarations.CreateUboDeclaration(null, userLegal.Id);
+			var uboDto = UboPostDtoCollection[1];
+			var ubo = await Api.UboDeclarations.CreateUbo(uboDto, userLegal.Id, uboDeclaration.Id);
+			var address = new Address
+			{
+				AddressLine1 = "Address line Natural1 1",
+				AddressLine2 = "Address line Natural1 2",
+				City = "CityNatural1",
+				Country = CountryIso.PL,
+				PostalCode = "11222",
+				Region = "RegionNatural1"
+			};
+			var birthDate = new DateTime(1985, 12, 21, 0, 0, 0);
+			var birthPlace = new Birthplace
+			{
+				City = "CityNatural1",
+				Country = CountryIso.PL
+			};
+			var uboPutDto = new UboPutDTO("JohnNatural1", "DoeNatural1", address, CountryIso.DE, birthDate, birthPlace);
+			UboDTO result = null;
+			Assert.DoesNotThrow(() =>
+				result = Api.UboDeclarations.UpdateUbo(uboPutDto, userLegal.Id, uboDeclaration.Id, ubo.Id).Result);
+			Assert.NotNull(result);
+			Assert.AreEqual(ubo.Id, result.Id);
+			Assert.AreEqual(uboPutDto.FirstName, result.FirstName);
 		}
 
 		[Test]
 		public async Task ApiUboDeclaration_Create_UboDeclaration_Valid()
 		{
-            await CreateUserNaturalPost();
-
 			var userLegal = await Api.Users.Create(CreateUserLegalPost());
-
-			var uboDeclarationPost = CreateUboDeclarationPost(userLegal, RefusedReasons);
 
 			UboDeclarationDTO result = null;
 
-			Assert.DoesNotThrowAsync(async () => result = await Api.UboDeclarations.Create(null, uboDeclarationPost));
+			Assert.DoesNotThrow(() => result = Api.UboDeclarations.CreateUboDeclaration(null, userLegal.Id).Result);
 			Assert.That(result.Status == UboDeclarationType.CREATED);
 			Assert.That(result.CreationDate != DateTime.MinValue);
 		}
 
 		[Test]
-		public async Task ApiUboDeclaration_Update_UboDeclaration_Valid()
+		public async Task ApiUboDeclaration_Get_UboDeclaration_Valid()
 		{
-            await CreateUserNaturalPost();
-
 			var userLegal = await Api.Users.Create(CreateUserLegalPost());
 
-			var uboDeclarationPost = CreateUboDeclarationPost(userLegal, RefusedReasons);
+			UboDeclarationDTO uboDeclaration = null;
+			Assert.DoesNotThrow(() => uboDeclaration = Api.UboDeclarations.Create(userLegal.Id).Result);
+			UboDeclarationDTO result = null;
+			Assert.DoesNotThrow(() =>
+				result = Api.UboDeclarations.GetUboDeclarationById(userLegal.Id, uboDeclaration.Id).Result);
+			Assert.NotNull(result);
+			Assert.AreEqual(uboDeclaration.Id, result.Id);
+		}
 
-			var uboDeclaration = await Api.UboDeclarations.Create(null, uboDeclarationPost);
+		//UboDeclarations test
+		[Test]
+		public async Task ApiUboDeclaration_GetAll_UboDeclaration_Valid()
+		{
+			var userLegal = await Api.Users.Create(CreateUserLegalPost());
+			var uboDeclarationDto = await Api.UboDeclarations.Create(userLegal.Id);
 
-			UboDeclarationPutDTO ubodeclarationPut = new UboDeclarationPutDTO()
+			ListPaginated<UboDeclarationDTO> result = null;
+			Pagination pagination = new Pagination(1, 1);
+			Assert.DoesNotThrow(() => result = Api.UboDeclarations.GetUboDeclarationByUserId(userLegal.Id, pagination).Result);
+			Assert.NotNull(result);
+			Assert.IsTrue(result.Count > 0);
+			Assert.AreEqual(uboDeclarationDto.Id, result[0].Id);
+		}
+
+		[Test]
+		public async Task ApiUboDeclaration_Update_UboDeclaration_Valid()
+		{
+			var userLegal = await Api.Users.Create(CreateUserLegalPost());
+
+			var uboDeclaration = await Api.UboDeclarations.CreateUboDeclaration(null, userLegal.Id);
+
+			List<UboPostDTO> ubopostDtos = UboPostDtoCollection;
+			List<UboDTO> uboDtos = new List<UboDTO>();
+
+			foreach (var uboPost in ubopostDtos)
 			{
-				ID = uboDeclaration.Id,
-				Status = UboDeclarationType.VALIDATION_ASKED,
-				RefusedReasonMessage = "New Refused Message",
-				RefusedReasonTypes = new UboRefusedReasonType[] { UboRefusedReasonType.MISSING_UBO }
-			};
+				var ubo = await Api.UboDeclarations.CreateUbo(null, uboPost, userLegal.Id, uboDeclaration.Id);
+				uboDtos.Add(ubo);
+			}
+
+			UboDeclarationPutDTO ubodeclarationPut =
+				new UboDeclarationPutDTO(uboDtos.ToArray(), UboDeclarationType.VALIDATION_ASKED);
 
 			UboDeclarationDTO result = null;
 
-			Assert.DoesNotThrowAsync(async () => result = await Api.UboDeclarations.Update(ubodeclarationPut, ubodeclarationPut.ID));
+			Assert.DoesNotThrow(() =>
+				result = Api.UboDeclarations.UpdateUboDeclaration(ubodeclarationPut, userLegal.Id, uboDeclaration.Id).Result);
 			Assert.That(result != null);
+			Assert.AreEqual(uboDeclaration.Id, result.Id);
 			Assert.That(result.Status == UboDeclarationType.VALIDATION_ASKED);
 			Assert.That(result.CreationDate != DateTime.MinValue);
-		}
-
-		private UboDeclarationPostDTO CreateUboDeclarationPost(UserLegalDTO userLegal, UboRefusedReasonType[] refusedResons)
-		{
-			return new UboDeclarationPostDTO()
-			{
-				UserId = userLegal.Id,
-				Status = UboDeclarationType.CREATED,
-				DeclaredUBOs = UserNaturallCollection.Select(x => x.Id).ToArray(),
-				RefusedReasonTypes = refusedResons,
-				RefusedReasonMessage = "Refused Reason Message"
-			};
-		}
-
-		private async Task CreateUserNaturalPost()
-		{
-			List<UserNaturalPostDTO> userNaturalCollection = UserNaturalPostCollection;
-
-			foreach (var user in userNaturalCollection)
-			{
-                user.Capacity = CapacityType.DECLARATIVE;
-                var userNatural = await Api.Users.Create(user);                
-                UserNaturallCollection.Add(userNatural);
-			}
-		}		
-
-		[TearDown]
-		public void TearDown()
-		{
-			UserNaturallCollection = null;
 		}
 	}
 }
